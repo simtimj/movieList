@@ -1,23 +1,60 @@
-import logo from './logo.svg';
-import './App.css';
+import MovieList from "./components/MovieList";
+import SearchBar from "./components/SearchBar";
+import AddMovies from "./components/AddMovie";
+import {useState, useEffect} from "react";
 
-function App() {
+const App = () => {
+  let [movies, setMovies] = useState([]);
+  let [searchBarText, setSearchBarText] = useState("");
+  let [watchFilter, setWatchFilter] = useState()      // undefined by default, then watch if successful
+
+  // api requests
+
+  // basic get request for test, just console, don't hook up to movies state
+  useEffect(() => {
+    // grab from server.js, will fee back movies
+    fetch('http://localhost:8080/test')
+    .then(res => {
+      console.log('App.js, res:', res);   // which needs json? data.json().
+      return res.json();
+    })
+    .then(data => {
+      setMovies(data)
+    })
+  }, [])
+
+  let filterMovies = (movies) => {
+    let allFiltered;
+    // 1st check search match
+    allFiltered = movies.filter(movie => {
+      return movie.title.toLowerCase().includes(searchBarText.toLowerCase());
+    })
+    
+    if (watchFilter === "Watched" || watchFilter === "To Watch" ) {
+      allFiltered = allFiltered.filter(movie => {
+        return movie.watchedStatus == watchFilter;
+      })
+    }
+    return allFiltered;
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hola Hola</h1>
+      <AddMovies 
+        movies={movies}
+        setMovies={setMovies}
+      />
+      <SearchBar 
+        setSearchBarText={setSearchBarText}
+      />
+      <MovieList 
+        movies={filterMovies(movies)}
+        setMovies={setMovies}
+        setWatchFilter={setWatchFilter}
+        searchBarText={searchBarText}
+        filterMovies={filterMovies}
+      />
     </div>
   );
 }
