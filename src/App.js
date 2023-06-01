@@ -19,7 +19,8 @@ const App = () => {
       return res.json();
     })
     .then(data => {
-      setMovies(data)
+      console.log('App.js, data:', data);
+      setMovies(data);
     })
   }, [])
 
@@ -60,3 +61,5 @@ const App = () => {
 }
 
 export default App;
+
+

@@ -5,17 +5,21 @@ let cors = require("cors")
 let port = 8080;
 let app = express();
 
+
 app.use(bodyParser.json()) // parsing bodies for json
 app.use(bodyParser.urlencoded({extended: false}))   // same as above, except for urls
-app.use(cors());
+// app.use(cors());
 app.use(express.static(`${__dirname}/build`))
+
+app.get('/', (req, res) => {
+  res.sendFile(`${__dirname}/build/index.html`)
+})
 
 
 app.get("/test", (req, res) => {
   // data fetching functionality will be moved into here
   async function fetchData() {
     // retrieve array of movies
-    console.log("test1")
     let api_key = "ff47db95d0bf39345ad1a50ae6380ee0";
     let trendingDBRoute = `http://api.themoviedb.org/3/movie/top_rated?api_key=${api_key}`;
     const req = await axios.get(trendingDBRoute)
