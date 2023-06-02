@@ -13,7 +13,7 @@ const App = () => {
   // basic get request for test, just console, don't hook up to movies state
   useEffect(() => {
     // grab from server.js, will fee back movies
-    fetch('http://localhost:8080/test')
+    fetch('/test')
     .then(res => {
       console.log('App.js, res:', res);   // which needs json? data.json().
       return res.json();
